@@ -4,6 +4,7 @@ import Draw
 import Graphics.UI.Threepenny
 import Data.IORef
 import Shape
+import Templates
 
 main :: IO ()
 main = startGUI defaultConfig initGame
@@ -27,6 +28,7 @@ initGame window = do
         liftIO $ writeIORef myShapeRef []
         fillCanvas canvas
       68 -> do
+        liftIO $ print (length myTemplates)
         return ()
         --currentShapes <- liftIO $ readIORef myShapesRef
         --liftIO $ writeFile "./templates.txt" (show currentShapes)
