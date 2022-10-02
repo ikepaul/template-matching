@@ -2,6 +2,7 @@ module Shape where
 
 import Graphics.UI.Threepenny hiding(map, div)
 import Draw
+import Data.List
 
 type Shape = [Point]
 
@@ -14,7 +15,12 @@ tanimoto s1 s2 = snd result / fst result where
   count = foldl (\b a -> (fst b + 1, snd b + (if a then 1 else 0))) (0,0)
   n = overlapping s1 s2
   m = overlapping s2 s1
-  overlapping a b = map (\sp -> 0.1*canvasWidth > hausdorrf sp b) a 
-
+  overlapping a b = map (\sp -> threshHold*canvasWidth > hausdorrf sp b) a 
 
 threshHold = 0.1
+
+findMatch :: Shape -> [Shape] -> [Char]
+findMatch s ts = map snd $ sortOn (((-1) *). fst) $ map (\(t,x) -> (tanimoto s t, x)) (zip ts myAlphabet)
+
+myAlphabet = "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+

@@ -18,10 +18,14 @@ initGame window = do
   mouseActivationRef <- liftIO $ newIORef (False :: Bool)
   myShapeRef <- liftIO $ newIORef ([] :: Shape)
   --myShapesRef <- liftIO $ newIORef ([] :: [Shape])
+  textHolder <- new 
+  element textHolder # set text "Bruhhh"
+
   body <- getBody window
   pure body
-    #+ [column [element canvas]]
+    #+ [column [element canvas], column [element textHolder]]
   
+
   on keydown body $ \(keyCode) -> do
     case keyCode of
       67 -> do
@@ -37,7 +41,11 @@ initGame window = do
         --liftIO $ modifyIORef myShapesRef (currentShape :)
         liftIO $ writeIORef myShapeRef []
         fillCanvas canvas
-      82 -> do
+      84 -> do
+        currentShape <- liftIO $ readIORef myShapeRef
+        let bestMatches = findMatch currentShape myTemplates
+        element textHolder # set text (show (head bestMatches))
+        liftIO $ print $ bestMatches
         return ()
         --liftIO $ modifyIORef myShapesRef (tail)
       otherwise -> return ()
